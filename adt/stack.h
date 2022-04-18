@@ -15,14 +15,14 @@ struct stack {
 
 typedef struct stack* stack;
 
-void stack_create( stack *__stack, void( *ifree )( void* memory ) );
-void stack_push( stack __stack, void *value );
-void stack_pop ( stack __stack, void **value );
-void stack_peek( stack __stack, void **value );
-void stack_clear( stack __stack );
-void stack_destroy( stack* __stack );
-bool stack_is_empty ( stack __stack );
-size_t stack_length( stack __stack );
+void stack_create( struct stack **__stack, void( *ifree )( void* memory ) );
+void stack_push( struct stack *__stack, void *value );
+void stack_pop ( struct stack *__stack, void **value );
+void stack_peek( struct stack *__stack, void **value );
+void stack_clear( struct stack *__stack );
+void stack_destroy( struct stack **__stack );
+bool stack_is_empty ( struct stack *__stack );
+size_t stack_length( struct stack *__stack );
 
 #include "stack.c"
 

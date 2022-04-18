@@ -16,13 +16,13 @@ struct queue {
 
 typedef struct queue* queue;
 
-void queue_create( queue *__queue , void( *ifree )( void *memory ) );
-void queue_push( queue __queue, void *value );
-void queue_remove( queue __queue, void **value );
-void queue_clear( queue __queue );
-void queue_destroy( queue* __queue );
-bool queue_is_empty( queue __queue);
-size_t queue_length( queue __queue);
+void queue_create( struct queue **__queue , void( *ifree )( void *memory ) );
+void queue_push( struct queue *__queue, void *value );
+void queue_remove( struct queue *__queue, void **value );
+void queue_clear( struct queue *__queue );
+void queue_destroy( struct queue **__queue );
+bool queue_is_empty( struct queue *__queue);
+size_t queue_length( struct queue *__queue);
 
 #include "queue.c"
 
