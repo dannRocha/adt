@@ -268,20 +268,20 @@ void list_get ( struct list *__list, void **value, int index ) {
 
 int list_index_of( struct list *__list, void *value, bool( *comparator )( void *target_value, void *current_value ) ) {
 
-    const int NOT_FOUND = -1;
+  const int NOT_FOUND = -1;
 
-    int index = 0;
-    struct neighbor *current_neighbor = __list->__head;
+  int index = 0;
+  struct neighbor *current_neighbor = __list->__head;
 
-    while( current_neighbor != NULL ) {
-      if( comparator( value, current_neighbor->__value ) )
-        return index;
+  while( current_neighbor != NULL ) {
+    if( comparator( value, current_neighbor->__value ) )
+      return index;
 
-      current_neighbor = current_neighbor->__right;
-      index++;
-    }
+    current_neighbor = current_neighbor->__right;
+    index++;
+  }
 
-    return NOT_FOUND;
+  return NOT_FOUND;
 }
 
 bool list_contains( struct list *__list, void *value, bool( *comparator )( void *target_value, void *current_value ) ) {
