@@ -4,11 +4,17 @@ static void __get_nearest_neighbor( list __list, struct neighbor **current_neigh
 void list_create( struct list **__list , void( *ifree )( void *memmory ) ) {
 
   if( *__list != NULL ) {
-    fprintf(stderr, "\033[31mlist_create( list * , void( * )( void * ) ). error: pointer to list does not release at %s line %d\033[0m\n", __FILE__, __LINE__ );
+    fprintf( stderr, "\033[31mlist_create( struct list * * , void( * )( void * ) ). error: pointer to list does not release at %s line %d\033[0m\n", __FILE__, __LINE__ );
     return ;
   }
 
-    *__list = new( struct list );
+  ( *__list ) = new( struct list );
+
+  if( *__list == NULL ) {
+    fprintf( stderr, "\033[31mlist_create( struct list ** , void( * )( void * ) ). error: enough memory" );
+    return;
+  }
+
   ( *__list )->free = ifree;
   ( *__list )->__head = NULL;
   ( *__list )->__tail = NULL;
@@ -20,7 +26,14 @@ void list_create( struct list **__list , void( *ifree )( void *memmory ) ) {
 
 void list_push( struct list *__list, void *value ) {
   if( __list->__head == NULL || list_length( __list ) == 0 ) {
+    
     __list->__head = new( struct neighbor );
+
+    if( __list->__head == NULL ) {
+      fprintf( stderr, "\033[31mlist_push( struct list *, void * ). error: enough memory" );
+      return;
+    }
+
     __list->__head->__left = NULL;
     __list->__head->__right = NULL;
     __list->__head->__value = value;
@@ -32,6 +45,11 @@ void list_push( struct list *__list, void *value ) {
 
   struct neighbor* old_tail = __list->__tail;
   struct neighbor* new_tail = new( struct neighbor );
+
+  if( new_tail == NULL ) {
+    fprintf( stderr, "\033[31mlist_push( struct list *, void * ). error: enough memory" );
+    return;
+  }
 
   new_tail->__left = NULL;
   new_tail->__right = NULL;
@@ -73,15 +91,15 @@ void list_insert( struct list *__list, void *value, int index ) {
      }
   }
 
-  if( current_neighbor == NULL ) {
-    printf("Inserir em [%d] tamanho da lista [%ld]\n", index, list_length( __list ) );
-    return;
-  }
-
   struct neighbor *left_neighbor = current_neighbor->__left;
   struct neighbor *right_neighbor = current_neighbor->__right;
 
   struct neighbor *new_neighbor = new( struct neighbor );
+
+  if( new_neighbor == NULL ) {
+    fprintf( stderr, "\033[31mlist_insert( struct list *, void * ). error: enough memory" );
+    return;
+  }
 
   new_neighbor->__left = NULL;
   new_neighbor->__right = NULL;
@@ -115,7 +133,7 @@ void list_remove( struct list *__list, void **value, int index ) {
   ( *value ) = NULL;
 
   if( index < 0 || index >= list_length( __list ) ) {
-    fprintf(stderr, "\033[31mlist_remove(list*. void*, int ). error: index out of bounds exception at %s line %d\033[0m\n", __FILE__, __LINE__);
+    fprintf(stderr, "\033[31mlist_remove(struct list*. void*, int ). error: index out of bounds exception at %s line %d\033[0m\n", __FILE__, __LINE__);
     return;
   }
 
