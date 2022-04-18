@@ -1,7 +1,7 @@
 
 static void __get_nearest_neighbor( list __list, struct neighbor **current_neighbor, int *counter, int index );
 
-void list_create( list *__list , void( *ifree )( void *memmory ) ) {
+void list_create( struct list **__list , void( *ifree )( void *memmory ) ) {
 
   if( *__list != NULL ) {
     fprintf(stderr, "\033[31mlist_create( list * , void( * )( void * ) ). error: pointer to list does not release at %s line %d\033[0m\n", __FILE__, __LINE__ );
@@ -18,7 +18,7 @@ void list_create( list *__list , void( *ifree )( void *memmory ) ) {
   ( *__list )->__direction_ascending = true;
 }
 
-void list_push( list __list, void *value ) {
+void list_push( struct list *__list, void *value ) {
   if( __list->__head == NULL || list_length( __list ) == 0 ) {
     __list->__head = new( struct neighbor );
     __list->__head->__left = NULL;
@@ -44,7 +44,7 @@ void list_push( list __list, void *value ) {
   __list->__length++;
 }
 
-void list_insert( list __list, void *value, int index ) {
+void list_insert( struct list *__list, void *value, int index ) {
    if( index < 0 || index >= list_length( __list ) ) {
       fprintf(stderr, "\033[31mlist_insert( struct list*, void **, int ). error: index out of bounds exception at %s line %d\033[0m\n", __FILE__, __LINE__);
       return;
@@ -110,7 +110,7 @@ void list_insert( list __list, void *value, int index ) {
   __list->__length++;
 }
 
-void list_remove( list __list, void **value, int index ) {
+void list_remove( struct list *__list, void **value, int index ) {
 
   ( *value ) = NULL;
 
@@ -164,15 +164,15 @@ void list_remove( list __list, void **value, int index ) {
 
 }
 
-void list_pop( list __list, void **value ) {
+void list_pop( struct list *__list, void **value ) {
   list_remove( __list, value, list_length( __list ) - 1 );
 }
 
-void list_shift( list __list, void **value ) {
+void list_shift( struct list *__list, void **value ) {
   list_remove( __list, value, 0);
 }
 
-static void __get_nearest_neighbor( list __list, struct neighbor **current_neighbor, int *counter, int index ) {
+static void __get_nearest_neighbor( struct list *__list, struct neighbor **current_neighbor, int *counter, int index ) {
 
   bool startFindByLeftNeighborIsMoreFast = ( index >= __list->__last_index_searched ) && ( __list->__last_neighbor_searched != NULL );
   if( startFindByLeftNeighborIsMoreFast ) {
@@ -211,15 +211,15 @@ static void __get_nearest_neighbor( list __list, struct neighbor **current_neigh
   }
 }
 
-void list_get ( list __list, void **value, int index ) {
+void list_get ( struct list *__list, void **value, int index ) {
 
   if( index < 0 ||  index >= list_length( __list ) ) {
-    fprintf(stderr, "\033[31mget_list_index_of(list*. void*, int ). error: index out of bounds exception at %s line %d\033[0m\n", __FILE__, __LINE__);
+    fprintf(stderr, "\033[31mlist_get ( struct list*, void**, int ). error: index out of bounds exception at %s line %d\033[0m\n", __FILE__, __LINE__);
     return;
   }
 
   if(  list_is_empty( __list ) ) {
-    fprintf( stderr, "\033[31mget_list_index_of ( struct list*, void**, int ). error: queue don't initialized or empty at %s line %d\033[0m\n", __FILE__, __LINE__ );
+    fprintf( stderr, "\033[31mlist_get ( struct list*, void**, int ). error: queue don't initialized or empty at %s line %d\033[0m\n", __FILE__, __LINE__ );
     return;
   }
 
@@ -248,7 +248,7 @@ void list_get ( list __list, void **value, int index ) {
   ( *value ) = current_neighbor->__value;
 }
 
-int list_index_of( list __list, void *value, bool( *comparator )( void *target_value, void *current_value ) ) {
+int list_index_of( struct list *__list, void *value, bool( *comparator )( void *target_value, void *current_value ) ) {
 
     const int NOT_FOUND = -1;
 
@@ -266,7 +266,7 @@ int list_index_of( list __list, void *value, bool( *comparator )( void *target_v
     return NOT_FOUND;
 }
 
-bool list_contains( list __list, void *value, bool( *comparator )( void *target_value, void *current_value ) ) {
+bool list_contains( struct list *__list, void *value, bool( *comparator )( void *target_value, void *current_value ) ) {
 
   struct neighbor *current_neighbor = __list->__head;
 
@@ -280,7 +280,7 @@ bool list_contains( list __list, void *value, bool( *comparator )( void *target_
   return false;
 }
 
-void list_foreach( list __list, void( *callback )( void *memory, int index ) ) {
+void list_foreach( struct list *__list, void( *callback )( void *memory, int index ) ) {
   struct neighbor *current_neighbor = __list->__head;
 
   for( int counter = 0; current_neighbor != NULL; counter++ ) {
@@ -289,7 +289,7 @@ void list_foreach( list __list, void( *callback )( void *memory, int index ) ) {
   }
 }
 
-size_t list_length( list __list) {
+size_t list_length( struct list *__list) {
   if( __list == NULL ) {
     fprintf( stderr, "\033[31mlist_length(struct list* ). error: list don't initialized\033[0m\n" );
     return 0;
@@ -298,11 +298,11 @@ size_t list_length( list __list) {
   return __list->__length;
 }
 
-bool list_is_empty( list __list) {
+bool list_is_empty( struct list *__list) {
   return ( __list == NULL ) ? true : __list->__length == 0;
 }
 
-void list_clear( list __list ) {
+void list_clear( struct list * __list ) {
   while( !list_is_empty( __list ) ) {
     void* mem = NULL;
     list_remove( __list, &mem, 0 );
@@ -313,10 +313,10 @@ void list_clear( list __list ) {
   __list->__tail = NULL;
 }
 
-void list_destroy( list *__list ) {
+void list_destroy( struct list **__list ) {
 
   if( *__list == NULL ) {
-    fprintf( stderr, "\033[31mlist_destroy(struct list* ). error: list don't initialized\033[0m\n" );
+    fprintf( stderr, "\033[31mlist_destroy(struct list** ). error: list don't initialized\033[0m\n" );
     return;
   }
 
