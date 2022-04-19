@@ -29,19 +29,19 @@ git init
 
 - Adicionando lib no projeto
 ```
-git submodule add https://github.com/dannRocha/adt.git src/lib/
+git submodule add https://github.com/dannRocha/adt.git src/lib/adt
 ```
 
-- Criando main.c
+- Criando main.c no diretorio ```src```.
 ```
 // project/src/main.c
-touch main.c
+touch src/main.c
 ```
 - Conteúdo da main.c
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "lib/adt.h"
+#include "lib/adt/adt.h"
 
 
 int main() {
