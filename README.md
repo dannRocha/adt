@@ -11,10 +11,64 @@ No projeto que fará uso das estruturas de dados, adicione esse repositório com
 ```
 git submodule add <repository-url>
 ```
-# Exemplo Github
+## Exemplo Github
 ```
-git submodule add https://github.com/<username>/<repository-name>.git
+git submodule add https://github.com/<username>/<repository-name>.git <path>
 ```
+
+## Exemplo Repo
+
+- Criando um diretório para o projeto e acessando o diretório
+```
+mkdir -p project/src && cd project
+```
+- Inicializando repositório git
+```
+git init
+```
+
+- Adicionando lib no projeto
+```
+git submodule add https://github.com/dannRocha/adt.git src/lib/
+```
+
+- Criando main.c
+```
+// project/src/main.c
+touch main.c
+```
+- Conteúdo da main.c
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include "lib/adt.h"
+
+
+int main() {
+
+  list integers = NULL;
+  list_create( &integers, free );
+
+  for( int i = 0; i < 10; i++ )
+    list_push( integers, new_int( i ) );
+
+
+  for( int i = 0; i < list_length( integers ); i++ ) {
+    void *value = NULL;
+    list_get( integers, &value, i );
+    printf( "%d\n", to_int( value ) );
+  }
+
+  list_destroy( &integers );
+
+  return 0;
+}
+```
+- Compilando e executando
+```
+gcc main.c && ./a.out
+```
+
 
 # Stack
 São estruturas de dados do tipo LIFO (last-in first-out), onde o último elemento a ser inserido, será o primeiro a ser retirado. Assim, uma pilha permite acesso a apenas um item de dados - o último inserido.
@@ -39,7 +93,7 @@ void stack_create( struct stack **__stack, void( *ifree )( void* memory ) );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -61,7 +115,7 @@ O segundo parametro da função de criação da pilha (```void( *ifree )( void* 
 ### Exemplo:
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 void my_free_function( void* memory );
 
@@ -89,7 +143,7 @@ void stack_destroy( struct stack **__stack );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
 
@@ -117,7 +171,7 @@ As estruturas de dados dessa biblioteca armazena endereços de memória e não v
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -157,7 +211,7 @@ Outra versão usando funções da biblioteca.
 
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -224,7 +278,7 @@ void stack_pop ( struct stack *__stack, void **value );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -276,7 +330,7 @@ Outra versão usando funções da biblioteca.
 
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -344,7 +398,7 @@ void stack_peek( struct stack *__stack, void **value );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -378,7 +432,7 @@ void stack_clear( struct stack *__stack );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -409,7 +463,7 @@ size_t stack_length( struct stack *__stack );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -439,7 +493,7 @@ bool stack_is_empty ( struct stack *__stack );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -478,7 +532,7 @@ void queue_create( struct queue **__queue , void( *ifree )( void *memory ) );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -498,7 +552,7 @@ queue numbers = NULL;
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 void my_free_function( void* memory );
 
@@ -523,7 +577,7 @@ void queue_destroy( struct queue **__queue );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
 
@@ -545,7 +599,7 @@ void queue_push( struct queue *__queue, void *value );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -572,7 +626,7 @@ void queue_remove( struct queue *__queue, void **value );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -607,7 +661,7 @@ void queue_clear( struct queue *__queue );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -635,7 +689,7 @@ void queue_destroy( struct queue **__queue );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -664,7 +718,7 @@ bool queue_is_empty( struct queue *__queue);
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -708,7 +762,7 @@ void list_create( struct list **__list , void( *ifree )( void *memory ) );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -727,7 +781,7 @@ void list_destroy( struct list **__list );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -748,7 +802,7 @@ void list_push( struct list *__list, void *value );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -771,7 +825,7 @@ Funções utilitarias de inicialização de tipos primitivos [clique aqui [ 1 ]]
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 struct book  {
   char* title;
@@ -915,7 +969,7 @@ void hashtable_create( struct hashtable **__hashtable, void( *ifree )( void *mem
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -935,7 +989,7 @@ void hashtable_destroy( struct hashtable **__hashtable );
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -956,7 +1010,7 @@ void hashtable_put( struct hashtable *__hashtable, const char* key, void *value 
 ### Exemplo
 ```c
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
@@ -982,7 +1036,7 @@ void hashtable_get( struct hashtable *__hashtable, const char* key, void **value
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include "adt/adt.h"
+#include "adt.h"
 
 int main() {
   
